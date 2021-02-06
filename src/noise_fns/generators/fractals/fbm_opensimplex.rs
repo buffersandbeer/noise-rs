@@ -1,6 +1,6 @@
 use crate::math;
 
-use crate::noise_fns::{MultiFractal, NoiseFn, Seedable, Perlin};
+use crate::noise_fns::{MultiFractal, NoiseFn, Seedable, OpenSimplex};
 
 /// Noise function that outputs fBm (fractal Brownian motion) noise.
 ///
@@ -19,7 +19,7 @@ use crate::noise_fns::{MultiFractal, NoiseFn, Seedable, Perlin};
 ///
 /// fBm is commonly referred to as Perlin noise.
 #[derive(Clone, Debug)]
-pub struct Fbm {
+pub struct Fbm_OpenSimplex {
     /// Total number of frequency octaves to generate the noise with.
     ///
     /// The number of octaves control the _amount of detail_ in the noise
@@ -49,7 +49,7 @@ pub struct Fbm {
     pub persistence: f64,
 
     seed: u32,
-    sources: Vec<Perlin>,
+    sources: Vec<OpenSimplex>,
     scale_factor: f64,
 }
 
@@ -57,7 +57,7 @@ fn calc_scale_factor(persistence: f64, octaves: usize) -> f64 {
     1.0 - persistence.powi(octaves as i32)
 }
 
-impl Fbm {
+impl Fbm_OpenSimplex {
     pub const DEFAULT_SEED: u32 = 0;
     pub const DEFAULT_OCTAVE_COUNT: usize = 6;
     pub const DEFAULT_FREQUENCY: f64 = 1.0;
@@ -72,19 +72,19 @@ impl Fbm {
             frequency: Self::DEFAULT_FREQUENCY,
             lacunarity: Self::DEFAULT_LACUNARITY,
             persistence: Self::DEFAULT_PERSISTENCE,
-            sources: super::build_sources(Self::DEFAULT_SEED, Self::DEFAULT_OCTAVE_COUNT),
+            sources: super::build_opensimplex_sources(Self::DEFAULT_SEED, Self::DEFAULT_OCTAVE_COUNT),
             scale_factor: calc_scale_factor(Self::DEFAULT_PERSISTENCE, Self::DEFAULT_OCTAVE_COUNT),
         }
     }
 }
 
-impl Default for Fbm {
+impl Default for Fbm_OpenSimplex {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl MultiFractal for Fbm {
+impl MultiFractal for Fbm_OpenSimplex {
     fn set_octaves(self, mut octaves: usize) -> Self {
         if self.octaves == octaves {
             return self;
@@ -116,7 +116,7 @@ impl MultiFractal for Fbm {
     }
 }
 
-impl Seedable for Fbm {
+impl Seedable for Fbm_OpenSimplex {
     fn set_seed(self, seed: u32) -> Self {
         if self.seed == seed {
             return self;
@@ -135,7 +135,7 @@ impl Seedable for Fbm {
 }
 
 /// 2-dimensional Fbm noise
-impl NoiseFn<[f64; 2]> for Fbm {
+impl NoiseFn<[f64; 2]> for Fbm_OpenSimplex {
     fn get(&self, mut point: [f64; 2]) -> f64 {
         let mut result = 0.0;
 
@@ -161,7 +161,7 @@ impl NoiseFn<[f64; 2]> for Fbm {
 }
 
 /// 3-dimensional Fbm noise
-impl NoiseFn<[f64; 3]> for Fbm {
+impl NoiseFn<[f64; 3]> for Fbm_OpenSimplex {
     fn get(&self, mut point: [f64; 3]) -> f64 {
         let mut result = 0.0;
 
@@ -187,7 +187,7 @@ impl NoiseFn<[f64; 3]> for Fbm {
 }
 
 /// 4-dimensional Fbm noise
-impl NoiseFn<[f64; 4]> for Fbm {
+impl NoiseFn<[f64; 4]> for Fbm_OpenSimplex {
     fn get(&self, mut point: [f64; 4]) -> f64 {
         let mut result = 0.0;
 
