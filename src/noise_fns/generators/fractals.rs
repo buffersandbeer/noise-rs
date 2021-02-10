@@ -1,8 +1,9 @@
-pub use self::{basicmulti::*, billow::*, fbm::*, hybridmulti::*, ridgedmulti::*};
+pub use self::{basicmulti::*, billow::*, fbm::*, hybridmulti::*, ridgedmulti::*, fbm_opensimplex::*};
 
 mod basicmulti;
 mod billow;
 mod fbm;
+mod fbm_opensimplex;
 mod hybridmulti;
 mod ridgedmulti;
 

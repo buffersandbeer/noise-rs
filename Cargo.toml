@@ -197,3 +197,11 @@ required-features = ["image"]
 [[example]]
 name = "complexplanet"
 required-features = ["image"]
+
+[[example]]
+name = "fbm-seeded"
+required-features = ["image"]
+
+[[example]]
+name = "fbm-opensimplex-seeded"
+required-features = ["image"]

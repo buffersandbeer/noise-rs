@@ -93,7 +93,7 @@ impl MultiFractal for Fbm_OpenSimplex {
         octaves = math::clamp(octaves, 1, Self::MAX_OCTAVES);
         Self {
             octaves,
-            sources: super::build_sources(self.seed, octaves),
+            sources: super::build_opensimplex_sources(self.seed, octaves),
             scale_factor: calc_scale_factor(self.persistence, octaves),
             ..self
         }
@@ -124,7 +124,7 @@ impl Seedable for Fbm_OpenSimplex {
 
         Self {
             seed,
-            sources: super::build_sources(seed, self.octaves),
+            sources: super::build_opensimplex_sources(seed, self.octaves),
             ..self
         }
     }
